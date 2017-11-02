@@ -3,9 +3,11 @@ Test  tasks
 
 Задания размещены в папке t-repo > Test
 
-Задание 1 (свёрстанная страница) - в папке task_1 > test-page > test-page.html
+Нужно скачать или клонировать данный репозиторий к себе на пк, далее:
 
-Задание 2 (редактор таблиц) - в папке task_2 > table-redactor.html 
+Задание 1 (свёрстанная страница) - в папке t-repo > Test > task_1 > test-page > test-page.html
+
+Задание 2 (редактор таблиц) - в папке t-repo > Test > task_2 > table-redactor.html 
 
 
 
