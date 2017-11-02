@@ -12,26 +12,25 @@
 </head>
 <body>
     <div id="content-wr" ng-app="demo" ng-controller="Ctrl">
-                <table>
-                    <thead>
-                        <td>Item Name</td>
-                        <td>Redactor</td>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="contact in model.contacts" ng-include="getTemplate(contact)">
-                        </tr>
-                    </tbody>
-                </table>
-                <form>	
-                  <span>Item Value:</span>
-                  <input class="input-value" type="text" placeholder="Enter some text..." ng-model="newEntry.id" ng-template="newEntry.name" />
-                  <div>
-	                  <button class="form-btn-save" ng-click="addContact(contact)">Save</button>
-	                  <button class="form-btn-back" ng-click="removeContact(contact)">&lt;&lt;Go back</button>
-                  </div>
-                </form>
+        <table>
+            <thead>
+                <td>Item Name</td>
+                <td>Redactor</td>
+            </thead>
+            <tbody>
+                <tr ng-repeat="contact in model.contacts" ng-include="getTemplate(contact)"></tr>
+            </tbody>
+        </table>
+        <form>	
+          <span>Item Value:</span>
+          <input class="input-value" ng-model="newEntry.name" type="text" placeholder="Enter some text..." ng-template="newEntry.name" />
+          <div>
+             <button class="form-btn-save" ng-click="addContact()">Save</button>
+             <button class="form-btn-back" ng-click="removeContact(contact)">&lt;&lt;Go back</button>
+         </div>
+     </form>
 
-    <script type="text/ng-template" id="display">
+     <script type="text/ng-template" id="display">
         <td>{{contact.name}}</td>
         <td>
             <button class="editor-btn" ng-click="editContact(contact)">edit</button>
@@ -83,9 +82,11 @@ function Ctrl($scope) {
         $scope.model.selected = angular.copy(contact);
     };
 
-    $scope.addContact = function (contact) {
-        $scope.model.contacts.push($scope.newEntry);
-	    $scope.newEntry = {};
+    $scope.addContact = function () {
+        var size = $scope.model.contacts.length;
+        $scope.newEntry.id = $scope.model.contacts[size - 1].id + 1;
+        $scope.model.contacts.push(angular.copy($scope.newEntry));
+        $scope.reset();
     };
 
     $scope.removeContact = function (contact) {
@@ -106,11 +107,6 @@ function Ctrl($scope) {
 
 
 <style>
-    *, *:before, *:after{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
 body{
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
@@ -120,13 +116,13 @@ body{
 	margin: 30px auto;
 }
 table{
-    width: 300px;
+    width: 350px;
 }
 tr, td{
     padding: 20px;
 }
 td{
-    width: 100px;
+    width: 130px;
     border: 1px solid #000;
 }
 form{
@@ -165,7 +161,7 @@ form > span{
 	display: inline-block;
 	border: 1px solid #000;
 	height: 40px;
-	min-width: 200px;
+	min-width: 230px;
 	font-size: 14px;
 	padding: 5px;
 }
