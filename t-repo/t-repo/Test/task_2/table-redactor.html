@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Table-redactor</title>
+	<!--
+	<link rel="stylesheet" href="table-style.css">
+	<script src="table-script.js"></script>
+	-->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+</head>
+<body>
+    <div id="content-wr" ng-app="demo" ng-controller="Ctrl">
+                <table>
+                    <thead>
+                        <td>Item Name</td>
+                        <td>Redactor</td>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="contact in model.contacts" ng-include="getTemplate(contact)">
+                        </tr>
+                    </tbody>
+                </table>
+                <form>	
+                  <span>Item Value:</span>
+                  <input class="input-value" type="text" placeholder="Enter some text..." ng-model="newEntry.id" ng-template="newEntry.name" />
+                  <div>
+	                  <button class="form-btn-save" ng-click="addContact(contact)">Save</button>
+	                  <button class="form-btn-back" ng-click="removeContact(contact)">&lt;&lt;Go back</button>
+                  </div>
+                </form>
+
+    <script type="text/ng-template" id="display">
+        <td>{{contact.name}}</td>
+        <td>
+            <button class="editor-btn" ng-click="editContact(contact)">edit</button>
+            <button class="editor-btn" ng-click="removeContact(contact)">remove</button>
+        </td>
+    </script>
+    <script type="text/ng-template" id="edit">
+        <td><input type="text" ng-model="model.selected.name" /></td>
+        <td>
+            <button class="editor-btn" ng-click="saveContact($index)">save</button>
+        </td>
+    </script>
+</div>
+</body>
+
+
+
+<script>
+var demo = angular.module("demo", []);
+
+demo.controller("Ctrl",
+
+function Ctrl($scope) {
+    $scope.newEntry = {};	
+
+    $scope.model = {
+         contacts: [{
+            id: 1,
+            name: "Some Item"
+        }, {
+            id: 2,
+            name: "Another Item"
+        }, {
+            id: 3,
+            name: "Item"
+        }, {
+            id: 4,
+            name: "Item"
+        }],
+        selected: {}
+    };
+
+    $scope.getTemplate = function (contact) {
+        if (contact.id === $scope.model.selected.id) return 'edit';
+        else return 'display';
+    };
+
+    $scope.editContact = function (contact) {
+        $scope.model.selected = angular.copy(contact);
+    };
+
+    $scope.addContact = function (contact) {
+        $scope.model.contacts.push($scope.newEntry);
+	    $scope.newEntry = {};
+    };
+
+    $scope.removeContact = function (contact) {
+        var index = $scope.model.contacts.indexOf(contact);
+        $scope.model.contacts.splice(index, 1);
+    };
+
+    $scope.saveContact = function (idx) {
+        $scope.model.contacts[idx] = angular.copy($scope.model.selected);
+        $scope.reset();
+    };
+    $scope.reset = function () {
+        $scope.model.selected = {};
+    };
+});
+</script>
+
+
+
+<style>
+    *, *:before, *:after{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+}
+#content-wr{
+	width: 75%;
+	margin: 30px auto;
+}
+table{
+    width: 300px;
+}
+tr, td{
+    padding: 20px;
+}
+td{
+    width: 100px;
+    border: 1px solid #000;
+}
+form{
+	margin-top: 15px;
+}
+form > span{
+	font-size: 18px;
+}
+.form-btn-save{
+	display: inline-block;
+	font-size: 18px;
+	width: 70px;
+	height: 40px;
+	background-color: #38761d;
+	border: 1px solid #000;
+	color: #fff;
+	cursor: pointer;
+	margin-right: 10px;
+}
+.form-btn-back, .editor-btn{
+	display: inline-block;
+	border: none;
+	background: none;
+	color: blue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+.form-btn-back{
+	font-size: 18px;
+	vertical-align: bottom;
+}
+.editor-btn:hover{
+	text-decoration: none;
+}
+.input-value{
+	display: inline-block;
+	border: 1px solid #000;
+	height: 40px;
+	min-width: 200px;
+	font-size: 14px;
+	padding: 5px;
+}
+.input-value::placeholder{
+	font-size: 18px;
+	color: #d9d9d9;
+}
+</style>
